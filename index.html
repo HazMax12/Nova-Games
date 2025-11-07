@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Games</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+    }
+
+    /* --- Galaxy background animation --- */
+    body {
+      background: radial-gradient(ellipse at bottom, #0b0e2a 0%, #000 100%);
+      overflow: hidden;
+    }
+
+    .stars, .nebula {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background-repeat: repeat;
+      animation: moveBackground 240s linear infinite;
+      z-index: 0;
+    }
+
+    .stars {
+      background-image: url('https://cdn.jsdelivr.net/gh/itsjustdel/pixel-stars/stars.png');
+      opacity: 0.6;
+      animation-duration: 300s;
+    }
+
+    .nebula {
+      background-image: url('https://cdn.pixabay.com/photo/2017/08/30/00/04/milky-way-2695569_1280.jpg');
+      background-size: cover;
+      opacity: 0.25;
+      animation-duration: 400s;
+    }
+
+    @keyframes moveBackground {
+      from { transform: translate3d(0,0,0); }
+      to { transform: translate3d(-50%, -50%, 0); }
+    }
+
+    /* --- Title with animated galaxy inside text --- */
+    .title {
+      position: absolute;
+      top: 40px;
+      width: 100%;
+      text-align: center;
+      font-size: 4rem;
+      font-weight: bold;
+      letter-spacing: 4px;
+      z-index: 5;
+      text-transform: uppercase;
+      background: url('https://cdn.pixabay.com/photo/2017/08/30/00/04/milky-way-2695569_1280.jpg');
+      background-size: 400% 400%;
+      background-repeat: repeat;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: moveTextGalaxy 30s linear infinite;
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+
+    @keyframes moveTextGalaxy {
+      from { background-position: 0% 0%; }
+      to { background-position: 100% 100%; }
+    }
+
+    /* --- Iframe container --- */
+    .iframe-container {
+      position: relative;
+      width: 90%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9;
+      margin: 160px auto 0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      background: #000;
+      z-index: 10;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    iframe.loaded {
+      opacity: 1;
+    }
+
+    /* --- Loader --- */
+    .loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #00ffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      z-index: 15;
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* --- Fullscreen Button --- */
+    .fullscreen-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      z-index: 20;
+    }
+
+    .fullscreen-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+      border-color: #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background layers -->
+  <div class="stars"></div>
+  <div class="nebula"></div>
+
+  <!-- Title -->
+  <div class="title">Nova Games</div>
+
+  <!-- Iframe -->
+  <div class="iframe-container" id="iframeContainer">
+    <div class="loader" id="loader"></div>
+    <iframe
+      id="minecraftFrame"
+      src="https://hazmax12.github.io/minecraft/"
+      loading="lazy"
+      allowfullscreen>
+    </iframe>
+    <button class="fullscreen-btn" id="fullscreenBtn">⛶ Fullscreen</button>
+  </div>
+
+  <script>
+    const iframe = document.getElementById("minecraftFrame");
+    const loader = document.getElementById("loader");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const container = document.getElementById("iframeContainer");
+
+    // Show iframe when loaded
+    iframe.addEventListener("load", () => {
+      iframe.classList.add("loaded");
+      loader.style.display = "none";
+    });
+
+    // Fullscreen toggle
+    fullscreenBtn.addEventListener("click", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        container.requestFullscreen().catch(err => {
+          alert("Fullscreen not supported: " + err.message);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
